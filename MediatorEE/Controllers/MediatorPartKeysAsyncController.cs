@@ -16,7 +16,7 @@ namespace MediatorEE.Controllers
 {
     public class MediatorPartKeysAsyncController : ApiController
     {
-        private MediatorEEContext db = new MediatorEEContext();
+        private MedStorageContext db = new MedStorageContext();
 
         // GET: api/MediatorPartKeysAsync
         public IQueryable<MediatorPartKey> GetMediatorPartKeys()

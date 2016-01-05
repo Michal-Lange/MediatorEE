@@ -6,7 +6,7 @@ using System.Web;
 
 namespace MediatorEE.Models
 {
-    public class MediatorEEContext : DbContext
+    public class MedStorageContext : DbContext
     {
         // You can add custom code to this file. Changes will not be overwritten.
         // 
@@ -14,8 +14,8 @@ namespace MediatorEE.Models
         // automatically whenever you change your model schema, please use data migrations.
         // For more information refer to the documentation:
         // http://msdn.microsoft.com/en-us/data/jj591621.aspx
-    
-        public MediatorEEContext() : base("name=MediatorEEContext")
+
+        public MedStorageContext() : base("name=MedStorageContext")
         {
         }
 
