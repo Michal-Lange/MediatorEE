@@ -6,6 +6,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using MediatorEE.Models;
@@ -17,17 +18,17 @@ namespace MediatorEE.Controllers
     {
         private MedStorageContext db = new MedStorageContext();
 
-        // GET: api/MediatorPartKeys
+        // GET: api/MediatorPartKeysAsync
         public IQueryable<MediatorPartKey> GetMediatorPartKeys()
         {
             return db.MediatorPartKeys;
         }
 
-        // GET: api/MediatorPartKeys/5
+        // GET: api/MediatorPartKeysAsync/5
         [ResponseType(typeof(MediatorPartKey))]
-        public IHttpActionResult GetMediatorPartKey(string id)
+        public async Task<IHttpActionResult> GetMediatorPartKey(string id)
         {
-            MediatorPartKey mediatorPartKey = db.MediatorPartKeys.Find(id);
+            MediatorPartKey mediatorPartKey = await db.MediatorPartKeys.FindAsync(id);
             if (mediatorPartKey == null)
             {
                 return NotFound();
@@ -36,16 +37,16 @@ namespace MediatorEE.Controllers
             return Ok(mediatorPartKey);
         }
 
-        // PUT: api/MediatorPartKeys/5
+        // PUT: api/MediatorPartKeysAsync/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutMediatorPartKey(string id, MediatorPartKey mediatorPartKey)
+        public async Task<IHttpActionResult> PutMediatorPartKey(string id, MediatorPartKey mediatorPartKey)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != mediatorPartKey.UserId)
+            if (id != mediatorPartKey.UserServiceKey)
             {
                 return BadRequest();
             }
@@ -54,7 +55,7 @@ namespace MediatorEE.Controllers
 
             try
             {
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -71,9 +72,9 @@ namespace MediatorEE.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/MediatorPartKeys
+        // POST: api/MediatorPartKeysAsync
         [ResponseType(typeof(MediatorPartKey))]
-        public IHttpActionResult PostMediatorPartKey(MediatorPartKey mediatorPartKey)
+        public async Task<IHttpActionResult> PostMediatorPartKey(MediatorPartKey mediatorPartKey)
         {
             if (!ModelState.IsValid)
             {
@@ -84,11 +85,11 @@ namespace MediatorEE.Controllers
 
             try
             {
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (MediatorPartKeyExists(mediatorPartKey.UserId))
+                if (MediatorPartKeyExists(mediatorPartKey.UserServiceKey))
                 {
                     return Conflict();
                 }
@@ -98,21 +99,21 @@ namespace MediatorEE.Controllers
                 }
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = mediatorPartKey.UserId }, mediatorPartKey);
+            return CreatedAtRoute("DefaultApi", new { id = mediatorPartKey.UserServiceKey }, mediatorPartKey);
         }
 
-        // DELETE: api/MediatorPartKeys/5
+        // DELETE: api/MediatorPartKeysAsync/5
         [ResponseType(typeof(MediatorPartKey))]
-        public IHttpActionResult DeleteMediatorPartKey(string id)
+        public async Task<IHttpActionResult> DeleteMediatorPartKey(string id)
         {
-            MediatorPartKey mediatorPartKey = db.MediatorPartKeys.Find(id);
+            MediatorPartKey mediatorPartKey = await db.MediatorPartKeys.FindAsync(id);
             if (mediatorPartKey == null)
             {
                 return NotFound();
             }
 
             db.MediatorPartKeys.Remove(mediatorPartKey);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
 
             return Ok(mediatorPartKey);
         }
@@ -128,7 +129,7 @@ namespace MediatorEE.Controllers
 
         private bool MediatorPartKeyExists(string id)
         {
-            return db.MediatorPartKeys.Count(e => e.UserId == id) > 0;
+            return db.MediatorPartKeys.Count(e => e.UserServiceKey == id) > 0;
         }
     }
 }

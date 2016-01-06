@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MySql.Data.Entity;
+using SecureSystemsMediator.Models;
+using System.Data.Common;
 using System.Data.Entity;
-using System.Linq;
-using System.Web;
 
 namespace MediatorEE.Models
 {
@@ -19,6 +18,18 @@ namespace MediatorEE.Models
         {
         }
 
-        public System.Data.Entity.DbSet<SecureSystemsMediator.Models.MediatorPartKey> MediatorPartKeys { get; set; }
+        // Constructor to use on a DbConnection that is already opened
+        public MedStorageContext(DbConnection existingConnection, bool contextOwnsConnection) : base(existingConnection, contextOwnsConnection)
+        {
+
+        }
+
+//        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+//        {
+//          base.OnModelCreating(modelBuilder);
+//            modelBuilder.Entity<MediatorPartKey>().MapToStoredProcedures();
+//        }
+
+        public DbSet<MediatorPartKey> MediatorPartKeys { get; set; }
     }
 }
